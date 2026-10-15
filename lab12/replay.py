@@ -122,7 +122,25 @@ def compare_with_tol(golden, new, atol=1e-3, rtol=1e-3):
     #   * |golden|. Hai NaN ở cùng vị trí coi là bằng nhau. Trả dict có đúng các khoá: segments,
     #   differ_beyond_tol, not_bit_identical (số đoạn không giống TỪNG BIT), max_abs_diff, atol, rtol,
     #   differing_segments (tối đa 20 chỉ số đầu, dạng list).
-    raise NotImplementedError("TODO compare_with_tol: xem GUIDE.md, Bước 1")
+    golden, new = np.asarray(golden), np.asarray(new)
+    if golden.shape != new.shape or golden.ndim != 2:
+        raise ValueError("golden and new must have the same (segments, time) shape")
+    paired_nan = np.isnan(golden) & np.isnan(new)
+    exact = (golden == new) | paired_nan
+    within_tol = np.isclose(golden, new, atol=atol, rtol=rtol, equal_nan=True)
+    segment_exact = exact.all(axis=1)
+    differing = np.flatnonzero(~within_tol.all(axis=1))
+    finite_diff = np.abs(golden - new)
+    finite_diff = finite_diff[np.isfinite(finite_diff)]
+    return {
+        "segments": int(golden.shape[0]),
+        "differ_beyond_tol": int(len(differing)),
+        "not_bit_identical": int((~segment_exact).sum()),
+        "max_abs_diff": float(finite_diff.max()) if finite_diff.size else 0.0,
+        "atol": float(atol),
+        "rtol": float(rtol),
+        "differing_segments": differing[:20].tolist(),
+    }
 
 
 def summation_order_demo(n=1_000_000, seed=0):
