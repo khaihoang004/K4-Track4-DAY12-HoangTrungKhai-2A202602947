@@ -20,7 +20,7 @@
 | IDM | 1.508 | 0.1% | Baseline |
 | EgoMLP | 0.768 | 19.9–29.3% | Chặn |
 | PercMLP | 0.619 | 0.7–1.4% | Chặn |
-| PercMLP+ (sau khi sửa) | | | |
+| PercMLP+ (sau khi sửa) | 0.819 | 0.2–0.3% | RELEASE |
 
 ## Câu 1 · Dữ liệu
 Bước 0 bạn phát hiện những vấn đề gì ở dữ liệu? Vì sao không dùng cột `Acc_LV`, và bạn thay bằng gì? Bao nhiêu quỹ đạo bị loại vì trùng, và vì sao chia theo quỹ đạo?
@@ -71,7 +71,7 @@ Với IDM, 64,9% là va chạm phía sau khi xe sau phát lại, giảm về 0% 
 ## Câu 7 · Cổng phát hành và sửa
 Quy tắc nào chặn PercMLP và nguyên nhân gốc là gì (dẫn số)? Bạn sửa bằng gì và vì sao nó chữa đúng nguyên nhân? Sau khi qua cổng, PercMLP+ có **tốt hơn** IDM không? Nó có nên được phát hành không, và bạn đề xuất làm gì trước khi quyết định?
 
-(trả lời ở đây)
+PercMLP rớt R2 (cận trên 1,84% > 1,07%), R3 (8,4% > 5,5%), R4 (11,37% > 2%) và R6 (16,5% > 7,1%); R5 đạt 0,7–1,4%. R4/R6 cho thấy thiếu kịch bản cut-in trong log; R2/R3 là lỗi tích lũy khi tự lái. Thêm 20.000 cut-in (196.930 cửa sổ) và 2 vòng DAgger gán nhãn IDM: PercMLP+ còn 0,2–0,3% va chạm log, 0,48% lưới và qua R1–R7. Nhưng L2 xấu từ 0,619 lên 0,819; IDM vẫn 0,1% va chạm log và 0% lưới, nên không thể nói PercMLP+ tốt hơn. Chỉ nên xem đây là không-kém-hơn theo ngưỡng; cần thêm thử nghiệm OOD ở 20 m/s và trên phần cứng/đường kín trước khi thay baseline.
 
 ## Câu 8 · Bài lab này không chứng minh được gì
 Chọn **ít nhất ba** giới hạn quan trọng nhất đối với việc quyết định phát hành và giải thích vì sao mỗi cái làm kết luận của bạn kém chắc chắn. Điều gì cần làm tiếp để thu hẹp khoảng cách đến thế giới thật?
